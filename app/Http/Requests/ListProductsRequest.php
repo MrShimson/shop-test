@@ -10,6 +10,8 @@ use Illuminate\Validation\Rule;
 
 class ListProductsRequest extends FormRequest
 {
+    private const MAX_PER_PAGE = 100;
+
     public function authorize(): bool
     {
         return true;
@@ -33,12 +35,12 @@ class ListProductsRequest extends FormRequest
             'q'           => ['nullable', 'string', 'max:255'],
             'price_from'  => ['nullable', 'numeric', 'min:0'],
             'price_to'    => ['nullable', 'numeric', 'min:0', 'gte:price_from'],
-            'category_id' => ['nullable', 'integer', Rule::exists('categories', 'id')],
+            'category_id' => ['nullable', 'integer'],
             'in_stock'    => ['nullable', 'boolean'],
             'rating_from' => ['nullable', 'numeric', 'min:0', 'max:5'],
             'sort'        => ['nullable', Rule::enum(ProductSort::class)],
             'page'        => ['nullable', 'integer', 'min:1'],
-            'per_page'    => ['nullable', 'integer', 'min:1', 'max:100'],
+            'per_page'    => ['nullable', 'integer', 'min:1'],
         ];
     }
 
@@ -64,6 +66,6 @@ class ListProductsRequest extends FormRequest
 
     public function perPage(): int
     {
-        return (int) $this->input('per_page', 20);
+        return min((int) $this->input('per_page', 20), self::MAX_PER_PAGE);
     }
 }

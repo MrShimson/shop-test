@@ -99,10 +99,13 @@ it('filters by category_id', function () {
         ->assertJsonPath('meta.total', 2);
 });
 
-it('rejects non-existing category_id', function () {
+it('returns empty list for non-existing category_id', function () {
+    Product::factory()->count(3)->recycle($this->category)->create();
+
     $this->getJson('/api/v1/products?category_id=999999')
-        ->assertStatus(422)
-        ->assertJsonValidationErrors(['category_id']);
+        ->assertOk()
+        ->assertJsonPath('meta.total', 0)
+        ->assertJsonCount(0, 'data');
 });
 
 it('filters by in_stock true/false and accepts both 1/0 and string forms', function () {
@@ -193,10 +196,13 @@ it('paginates with page and per_page parameters', function () {
         ->assertJsonCount(10, 'data');
 });
 
-it('rejects per_page above the cap', function () {
+it('caps per_page at the maximum', function () {
+    Product::factory()->count(120)->recycle($this->category)->create();
+
     $this->getJson('/api/v1/products?per_page=1000')
-        ->assertStatus(422)
-        ->assertJsonValidationErrors(['per_page']);
+        ->assertOk()
+        ->assertJsonPath('meta.per_page', 100)
+        ->assertJsonCount(100, 'data');
 });
 
 it('combines multiple filters', function () {
