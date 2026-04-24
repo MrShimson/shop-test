@@ -1,0 +1,49 @@
+### Dependencies
+/vendor/
+/node_modules/
+
+### Laravel
+/bootstrap/compiled.php
+/storage/*.key
+/storage/pail
+
+### Vite / frontend build
+/public/storage
+/public/hot
+/public/build
+
+### Env
+.env
+.env.backup
+.env.production
+.phpactor.json
+auth.json
+
+### Test / lint caches
+/.phpunit.result.cache
+/.phpunit.cache
+_ide_helper.php
+
+### Logs & tmp
+*.log
+npm-debug.log
+yarn-error.log
+/tmp
+
+### OS
+.DS_Store
+Thumbs.db
+
+### Editors / IDE
+.idea
+/.vscode
+/.zed
+/.nova
+/.cursor
+/.codex
+Homestead.json
+Homestead.yaml
+
+### Claude Code / AI tooling
+.claude/
+CLAUDE.md

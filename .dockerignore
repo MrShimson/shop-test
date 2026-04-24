@@ -1,0 +1,70 @@
+### VCS
+.git
+.gitignore
+.gitattributes
+
+### Dependencies
+node_modules
+vendor
+
+### Laravel
+storage/logs/*
+!storage/logs/.gitignore
+storage/framework/cache/*
+!storage/framework/cache/.gitignore
+storage/framework/sessions/*
+!storage/framework/sessions/.gitignore
+storage/framework/views/*
+!storage/framework/views/.gitignore
+storage/framework/testing/*
+!storage/framework/testing/.gitignore
+storage/app/public/*
+!storage/app/public/.gitignore
+storage/app/private/*
+!storage/app/private/.gitignore
+storage/*.key
+storage/pail
+bootstrap/cache/*
+!bootstrap/cache/.gitignore
+
+### Vite / frontend build
+public/build
+public/hot
+public/storage
+
+### Env
+.env
+.env.*
+!.env.example
+auth.json
+
+### Test / lint caches
+.phpunit.cache
+.phpunit.result.cache
+.phpactor.json
+coverage.xml
+_ide_helper.php
+
+### Logs & tmp
+*.log
+npm-debug.log
+yarn-error.log
+tmp
+
+### OS
+.DS_Store
+Thumbs.db
+
+### Editors / IDE
+.idea
+.vscode
+.zed
+.editorconfig
+
+### Claude Code / AI tooling
+.claude
+CLAUDE.md
+
+### Project meta
+README.md
+LICENSE
