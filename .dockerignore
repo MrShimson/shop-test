@@ -44,6 +44,7 @@ auth.json
 .phpactor.json
 coverage.xml
 _ide_helper.php
+_ide_helper_models.php
 
 ### Logs & tmp
 *.log

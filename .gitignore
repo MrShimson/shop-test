@@ -23,6 +23,7 @@ auth.json
 /.phpunit.result.cache
 /.phpunit.cache
 _ide_helper.php
+_ide_helper_models.php
 
 ### Logs & tmp
 *.log

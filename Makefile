@@ -1,4 +1,4 @@
-.PHONY: init rebuild up down start install test lint lint-check fresh
+.PHONY: init rebuild up down start install test lint lint-check fresh ide-help
 
 init:
 	cp -n .env.example .env || true
@@ -34,3 +34,6 @@ lint-check:
 
 fresh:
 	./bin/artisan migrate:fresh --seed
+
+ide-help:
+	./bin/artisan ide-helper:models -N
