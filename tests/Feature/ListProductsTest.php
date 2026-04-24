@@ -19,7 +19,7 @@ it('returns paginated list with default shape', function () {
                 '*' => ['id', 'name', 'price', 'rating', 'in_stock', 'category' => ['id', 'name'], 'created_at', 'updated_at'],
             ],
             'links' => ['first', 'last', 'prev', 'next'],
-            'meta'  => ['current_page', 'from', 'last_page', 'per_page', 'to', 'total'],
+            'meta' => ['current_page', 'from', 'last_page', 'per_page', 'to', 'total'],
         ])
         ->assertJsonPath('meta.total', 5);
 });

@@ -16,8 +16,7 @@ use Tests\TestCase;
 
 pest()->extend(TestCase::class)
     ->use(DatabaseTruncation::class)
-    ->in('Feature')
-;
+    ->in('Feature');
 
 /*
 |--------------------------------------------------------------------------

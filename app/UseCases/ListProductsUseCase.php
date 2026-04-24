@@ -14,11 +14,10 @@ class ListProductsUseCase
     public function handle(ListProductsRequest $request): LengthAwarePaginator
     {
         $query = $this->filter->applyFilters(Product::query(), $request->filters());
-        $sort  = $request->sort();
+        $sort = $request->sort();
 
         return $query->with('category')
             ->orderBy($sort->column(), $sort->direction())
-            ->paginate($request->perPage())
-        ;
+            ->paginate($request->perPage());
     }
 }

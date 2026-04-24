@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
         Product::factory()
             ->count(1500)
             ->recycle($categories)
-            ->create()
-        ;
+            ->create();
     }
 }

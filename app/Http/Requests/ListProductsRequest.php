@@ -32,15 +32,15 @@ class ListProductsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'q'           => ['nullable', 'string', 'max:255'],
-            'price_from'  => ['nullable', 'numeric', 'min:0'],
-            'price_to'    => ['nullable', 'numeric', 'min:0', 'gte:price_from'],
+            'q' => ['nullable', 'string', 'max:255'],
+            'price_from' => ['nullable', 'numeric', 'min:0'],
+            'price_to' => ['nullable', 'numeric', 'min:0', 'gte:price_from'],
             'category_id' => ['nullable', 'integer'],
-            'in_stock'    => ['nullable', 'boolean'],
+            'in_stock' => ['nullable', 'boolean'],
             'rating_from' => ['nullable', 'numeric', 'min:0', 'max:5'],
-            'sort'        => ['nullable', Rule::enum(ProductSort::class)],
-            'page'        => ['nullable', 'integer', 'min:1'],
-            'per_page'    => ['nullable', 'integer', 'min:1'],
+            'sort' => ['nullable', Rule::enum(ProductSort::class)],
+            'page' => ['nullable', 'integer', 'min:1'],
+            'per_page' => ['nullable', 'integer', 'min:1'],
         ];
     }
 

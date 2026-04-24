@@ -18,15 +18,14 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         $category = $this->getRandomRecycledModel(Category::class)
-            ?? Category::factory()->create()
-        ;
+            ?? Category::factory()->create();
 
         return [
-            'name'        => $this->buildProductName($category),
-            'price'       => fake()->randomFloat(2, 10, 3000),
+            'name' => $this->buildProductName($category),
+            'price' => fake()->randomFloat(2, 10, 3000),
             'category_id' => $category->id,
-            'in_stock'    => fake()->boolean(70),
-            'rating'      => fake()->randomFloat(1, 0, 5),
+            'in_stock' => fake()->boolean(70),
+            'rating' => fake()->randomFloat(1, 0, 5),
         ];
     }
 
@@ -35,7 +34,7 @@ class ProductFactory extends Factory
         $case = ProductCategory::tryFrom($category->name);
 
         if ($case === null) {
-            return "Generic {$category->name} " . fake()->bothify('??###');
+            return "Generic {$category->name} ".fake()->bothify('??###');
         }
 
         $productNameParts = array_map(fn (array $options) => fake()->randomElement($options), $case->shape());
