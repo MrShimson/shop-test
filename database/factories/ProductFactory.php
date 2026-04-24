@@ -26,7 +26,7 @@ class ProductFactory extends Factory
             'price'       => fake()->randomFloat(2, 10, 3000),
             'category_id' => $category->id,
             'in_stock'    => fake()->boolean(70),
-            'rating'      => round(fake()->randomFloat(1, 0, 5), 2),
+            'rating'      => fake()->randomFloat(1, 0, 5),
         ];
     }
 
