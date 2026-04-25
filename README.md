@@ -1,58 +1,104 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# shop-test
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![CI](https://github.com/MrShimson/shop-test/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/MrShimson/shop-test/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/MrShimson/shop-test/branch/master/graph/badge.svg)](https://codecov.io/gh/MrShimson/shop-test)
 
-## About Laravel
+Тестовое задание: продуктовый каталог с фильтрацией, сортировкой, поиском и пагинацией. Один эндпоинт — `GET /api/v1/products`.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Стек
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP 8.3, Laravel 13
+- MySQL 8 (FULLTEXT-индекс на `name`, индексы на фильтруемые поля)
+- Pest 4 — feature-тесты
+- Docker Compose — окружение
+- Pint, GitHub Actions, Codecov
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Запуск
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+make init
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Что делает:
+- поднимает контейнеры (`app`, `mysql`, `mysql_test`);
+- ставит зависимости;
+- генерирует `APP_KEY`;
+- мигрирует и сидит ~1500 товаров в 10 категориях.
 
-## Contributing
+API доступен на `http://localhost:8000`.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## API
 
-## Code of Conduct
+`GET /api/v1/products`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Параметр      | Тип       | Описание                                                         |
+| ------------- | --------- |------------------------------------------------------------------|
+| `q`           | string    | Поиск по `name`. ≥3 символов — FULLTEXT с префиксом, иначе LIKE  |
+| `price_from`  | number    | Нижняя граница цены, включительно                                |
+| `price_to`    | number    | Верхняя граница цены, включительно                               |
+| `category_id` | int       | Несуществующий → пустой список                                   |
+| `in_stock`    | bool      | `true`/`false`/`1`/`0`                                           |
+| `rating_from` | 0..5      | Минимальный рейтинг                                              |
+| `sort`        | enum      | `price_asc`, `price_desc`, `rating_desc`, `newest` (default)     |
+| `page`        | int       | Страница, начиная с 1                                            |
+| `per_page`    | int       | Размер страницы, дефолт 20, кап 100                              |
 
-## Security Vulnerabilities
+### Примеры
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+# базовый список
+curl http://localhost:8000/api/v1/products
 
-## License
+# поиск + фильтры + сортировка
+curl "http://localhost:8000/api/v1/products?q=iphone&in_stock=true&price_from=500&rating_from=4&sort=price_asc"
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# пагинация
+curl "http://localhost:8000/api/v1/products?page=2&per_page=10"
+```
+
+Готовые запросы для REST-клиента — в [`api.http`](api.http).
+
+## Команды
+
+```bash
+make up            # поднять контейнеры
+make down          # остановить
+make test          # запустить Pest
+make coverage      # тесты + текстовый coverage
+make lint          # форматирование (Pint)
+make lint-check    # проверка форматирования (для CI)
+make fresh         # пересоздать БД и засидить
+```
+
+Под капотом — `bin/composer`, `bin/artisan`, `bin/pest`, `bin/pint`: обёртки над `docker compose exec` с пробросом UID/GID.
+
+## Архитектура
+
+```
+app/
+├── Enums/
+│   ├── ProductCategory.php   # источник истины: имена категорий + шаблоны имён товаров
+│   └── ProductSort.php       # enum для sort, с column() / direction()
+├── Filters/
+│   └── ProductFilter.php     # сборка where-условий из Collection
+├── Http/
+│   ├── Controllers/Api/V1/
+│   │   └── ProductController.php
+│   ├── Requests/
+│   │   └── ListProductsRequest.php   # валидация + filters() / sort() / perPage()
+│   └── Resources/V1/
+│       └── ProductResource.php
+├── Models/
+│   ├── Category.php
+│   └── Product.php
+└── UseCases/
+    └── ListProductsUseCase.php       # оркестратор: filter → sort → paginate
+```
+
+## Тесты
+
+```bash
+make test
+```
+
+Используется отдельная БД `mysql_test` (отдельный сервис в compose) — чтобы `make fresh` локально не сносил тестовые данные.
