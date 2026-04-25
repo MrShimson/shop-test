@@ -25,6 +25,12 @@ make init
 - генерирует `APP_KEY`;
 - мигрирует и сидит ~1500 товаров в 10 категориях.
 
+Затем — поднять веб-сервер:
+
+```bash
+make start
+```
+
 API доступен на `http://localhost:8000`.
 
 ## API
@@ -63,6 +69,7 @@ curl "http://localhost:8000/api/v1/products?page=2&per_page=10"
 ```bash
 make up            # поднять контейнеры
 make down          # остановить
+make start         # artisan serve внутри контейнера, на :8000
 make test          # запустить Pest
 make coverage      # тесты + текстовый coverage
 make lint          # форматирование (Pint)
