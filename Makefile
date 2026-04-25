@@ -1,4 +1,4 @@
-.PHONY: init rebuild up down start install test lint lint-check fresh ide-help
+.PHONY: init rebuild up down start install test coverage lint lint-check fresh ide-help
 
 init:
 	cp -n .env.example .env || true
@@ -25,6 +25,9 @@ start:
 
 test:
 	./bin/pest
+
+coverage:
+	./bin/pest --coverage
 
 lint:
 	./bin/pint
